@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="side" default="r"/> <!-- "b" = blue side, "r" = red side  -->
+  <arg name="robot_namespace" default=""/>
+    <!-- You can change control program  -->
+
+    <!-- Navigation sample program  -->
+
+    <include file="$(find burger_navigation)/launch/burger_navigation.launch" />
+    <node pkg="burger_war_dev" type="nn_run.py" name="nn_run" output="screen"/>
+      <param name="side" value="$(arg side)" />
+      <param name="robot_namespace" value="$(arg robot_namespace)" />
+    <!-- obstacle_detectorを起動 -->
+    <include file="$(find burger_war_dev)/launch/obstacle_detector.launch">
+      <arg name="robot_namespace" default="$(arg robot_namespace)"/>
+    </include>
+
+    <!-- obstacle_detectorを用いた敵検出ノードを起動-->
+    <node pkg="burger_war_dev" type="enemy_detector.py" name="enemy_detector_node" output="screen">
+      <param name="robot_namespace" value="$(arg robot_namespace)"/>
+    </node>
+
+    <!-- END Navigation sample program node -->
+
+    <!-- End of your space  -->
+</launch>
+
